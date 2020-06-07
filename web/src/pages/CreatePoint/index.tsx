@@ -64,7 +64,7 @@ const CreatePoint = () => {
 
             setUfs(ufInitials);
         });
-    }, []);
+    }, []); // Está faltando o array?
 
     useEffect(() => {
         if (selectedUf === '0') {
