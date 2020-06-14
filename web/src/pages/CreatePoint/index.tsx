@@ -43,6 +43,7 @@ const CreatePoint = () => {
     const [selectedCity, setSelectedCity] = useState('0');
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
+    const [selectedFile, setSelectedFile] = useState<File>(); // Verificar o erro
 
     const history = useHistory();
 
@@ -158,7 +159,7 @@ const CreatePoint = () => {
             <form onSubmit={handleSubmit}>
                 <h1>Castro do <br />ponto de coleta</h1>
 
-                <Dropzone />
+                <Dropzone onFileUploaded={setSelectedFile}/>
 
                 <fieldset>
                     <legend>
