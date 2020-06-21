@@ -43,7 +43,7 @@ const CreatePoint = () => {
     const [selectedCity, setSelectedCity] = useState('0');
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
-    const [selectedFile, setSelectedFile] = useState<File>(); // Verificar o erro
+    const [selectedFile, setSelectedFile] = useState<File>(); // Verificar o erro 
 
     const history = useHistory();
 
@@ -58,8 +58,8 @@ const CreatePoint = () => {
     useEffect(() => {
         api.get('items').then(response => {
             setItems(response.data);
-        })
-    });
+        });
+    }, []);
 
     useEffect(() => {
         axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
@@ -67,7 +67,7 @@ const CreatePoint = () => {
 
             setUfs(ufInitials);
         });
-    }, []); // Está faltando o array?
+    }, []);
 
     useEffect(() => {
         if (selectedUf === '0') {
@@ -127,16 +127,20 @@ const CreatePoint = () => {
         const [latitude, longitude] = selectedPosition;
         const items = selectedItems;
 
-        const data = {
-            name,
-            email,
-            whatsapp,
-            uf,
-            city,
-            latitude,
-            longitude,
-            items
-        };
+        const data = new FormData();
+
+        data.append('name', name);
+        data.append('email', email);
+        data.append('whatsapp', whatsapp);
+        data.append('uf', uf);
+        data.append('city', city);
+        data.append('latitude', String(latitude));
+        data.append('longitude', String(longitude));
+        data.append('items', items.join(','));
+
+        if (selectedFile) {
+            data.append('image', selectedFile)
+        }
 
         await api.post('points', data);
 
@@ -159,7 +163,7 @@ const CreatePoint = () => {
             <form onSubmit={handleSubmit}>
                 <h1>Castro do <br />ponto de coleta</h1>
 
-                <Dropzone onFileUploaded={setSelectedFile}/>
+                <Dropzone onFileUploaded={setSelectedFile} />
 
                 <fieldset>
                     <legend>
